@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import OnClickOutside from 'react-onclickoutside';
 
 function Dropdown ({ title, items, multiselect = false }) {
   const [open, setOpen] = useState(false);
   const [selection, setSelection] = useState([]);
   const toggle = () => setOpen(!open);
+  Dropdown.handleClickOutside = () => setOpen(false);
 
   function handleOnClick(item) {
     // if we dont have the item already (unique item)
@@ -21,7 +23,7 @@ function Dropdown ({ title, items, multiselect = false }) {
       // and he clicks to remove it from the selection (using filter)
       let selectionAfterRemoval = selection;
       selectionAfterRemoval = selectionAfterRemoval.filter(
-        current => current.id != item.id
+        current => current.id !== item.id
       );
       setSelection([...selectionAfterRemoval]); //new array
     }
@@ -67,4 +69,8 @@ function Dropdown ({ title, items, multiselect = false }) {
   )
 }
 
-export default Dropdown
+const clickOutsideConfig = {
+  handleClickOutside: () => Dropdown.handleClickOutside
+}
+
+export default OnClickOutside(Dropdown, clickOutsideConfig);
