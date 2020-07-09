@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 
-function Dropdown ({ title, items, multiselect = false }) {
+function Dropdown ({ title, items = [], multiselect = false }) {
   const [open, setOpen] = useState(false);
   /* const [selection, setSelection] = useState([]); */
   const toggle = () => setOpen(!open);
-/*
-  function handleClick(item) {
+
+  function handleOnClick(item) {
   }
- */
+
   return (
     <div className="dd-wrapper">
       <div
@@ -19,7 +19,22 @@ function Dropdown ({ title, items, multiselect = false }) {
           <div className="dd-header_title">
             <p className="dd-header_title--bold">{title}</p>
           </div>
+          <div className="dd-header_action">
+            <p>{open ? 'Close' : 'Open'}</p>
+          </div>
       </div>
+      {open && (
+        <ul className="dd-list">
+          {items.map(item => (
+            <li className="dd-item" key={item.id}>
+              <button type="button" onClick={() => handleOnClick(item)}>
+                <span>{item.value}</span>
+                <span>Selected...</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   )
 }
