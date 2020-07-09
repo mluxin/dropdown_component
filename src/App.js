@@ -21,7 +21,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Dropdown title="Select a movie"  items={items}/>
+        <Dropdown title="Select a movie"  items={items} multiselect/>
       </header>
     </div>
   );

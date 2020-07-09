@@ -1,12 +1,40 @@
 import React, { useState } from 'react';
 
-function Dropdown ({ title, items = [], multiselect = false }) {
+function Dropdown ({ title, items, multiselect = false }) {
   const [open, setOpen] = useState(false);
-  /* const [selection, setSelection] = useState([]); */
+  const [selection, setSelection] = useState([]);
   const toggle = () => setOpen(!open);
 
   function handleOnClick(item) {
+    // if we dont have the item already (unique item)
+    if (!selection.some(current => current.id === item.id)) {
+      // go ahead and add that item
+      if (!multiselect) {
+        setSelection([item])
+      } else if (multiselect) {
+        // spread the current selection (which has items inside) and add the new item
+        setSelection([...selection, item])
+      }
+    } else {
+      // remove the item if isnt unique
+      // the user knows that he has the item in the selection
+      // and he clicks to remove it from the selection (using filter)
+      let selectionAfterRemoval = selection;
+      selectionAfterRemoval = selectionAfterRemoval.filter(
+        current => current.id != item.id
+      );
+      setSelection([...selectionAfterRemoval]); //new array
+    }
   }
+
+  function isItemInSelection(item) {
+    if (selection.find(current => current.id === item.id)) {
+      return true;
+    }
+    return false;
+  }
+
+
 
   return (
     <div className="dd-wrapper">
@@ -29,7 +57,7 @@ function Dropdown ({ title, items = [], multiselect = false }) {
             <li className="dd-item" key={item.id}>
               <button type="button" onClick={() => handleOnClick(item)}>
                 <span>{item.value}</span>
-                <span>Selected...</span>
+                <span>{isItemInSelection(item) && 'Selected'}</span>
               </button>
             </li>
           ))}
